@@ -1,1 +1,28 @@
+server:
+  port : 8090
+
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: bot-route
+          uri: ${BOT_ROUTE_URI:http://localhost:8093}
+          predicates:
+            - Path=/bot/**
+          filters:
+            - RewritePath=/bot/(?<segment>.*),/bot/$\{segment}
+        - id: breakfasts-route
+          uri: ${BR_ROUTE_URI:http://localhost:8092}
+          predicates:
+            - Path=/api/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/api/$\{segment}
+        - id: dinners-route
+          uri: ${DIN_ROUTE_URI:http://localhost:8091}
+          predicates:
+            - Path=/v2/api/**
+          filters:
+            - RewritePath=/v2/api/(?<segment>.*),/v2/api/$\{segment}
+
 
